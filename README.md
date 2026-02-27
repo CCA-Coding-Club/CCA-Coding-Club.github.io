@@ -143,6 +143,8 @@ If you’d like to get involved or have questions:
 ### Ready to Start Learning?
 Head to the [Wiki Home Page](../../wiki) and begin with our **[Python Basics](../../wiki/Python)** guide!
 
+<!-- New cool stuff -->
+
 ---
 
 © 2025 Coding Club - Built by students, for students.
