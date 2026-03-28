@@ -1,0 +1,76 @@
+By Brenden Cheng
+
+CODING WEBSITE IMPLEMENTATION / REFACTOR
+
+Tech Stack:
+- React
+- HTML
+- CSS
+- JavaScript
+- MongoDB
+- GitHub Pages
+
+MongoDB Structure:
+- Database is named CodingClubWebsite
+
+- Collection called Challenges structured as such:
+"challengeId": string
+"challengeName": string
+"challengeCreation": date
+"challengeDescription": string
+"challengeDetails": string --> this should be a big string formatted to be markdown
+We can add more data in the future too
+
+- Collection called ChallengeSubmissions
+- Each document is structured as such: 
+"challengeId": string
+"memberName": string
+"submissionHistory": array that contains objects -->
+	{ "attempt": 1, "submissionDate": date, "submissionId": int }
+
+- Collection called ChallengeSubmissionsCode
+Each document is structured as such: 
+"submissionId": int
+"submissionDate": date
+"submissionCode": string
+
+^ this database design choice was made so we don't make the client get ALL the submission's codes when we don't need it. We can make analytics and aggregate data easier this way
+
+
+Website Contains:
+- Info Page
+- Challenges Page
+
+Info Page:
+- Will contain a md file that the page needs to render
+
+Challenges Page:
+- When initially loading, GET the first 10 most recent challenges based on challenge creation date (recent first)
+	- We will use pagination to reduce load
+- Then render squares that each correspond to a challenge from a specific week, when pressed, expand in the page (but does not reroute) to display the specific challenge name and details. 
+	- Renders challenge details as markdown
+- Also, in the same page, button for "view solutions" 
+	- GETs 10 most recent ChallengeSubmissions associated with the challenge selected, and then gets all submission ids to pull the code from ChallengeSubmissionsCode and renders them organized by member
+		- Similarly, for pagination to reduce load
+	- refresh button to get most recent submissions
+- Submissions are grouped by student name, ordered by date (student's history with the most recent submission will appear first)
+
+Website Goals:
+- Make UI reusable and clean
+- Make project structure simple and reusable
+- Make URL structure Understandable
+
+Future Goals:
+- Admin page to view stats and make modifications
+	- search for specific member submissions
+	- add feature for admins to review submissions and validate
+	- delete / modify submissions
+	- Maybe login for o-auth? I don't quite know how this will work with a static website.
+- Maximize button on viewing solutions
+- when viewing a challenge, add Submit solution button requiring first name and code
+
+DISCORD BOT IMPLEMENTATION
+Need command to submit to mongodb 
+something like: !submit challengeId "code"
+We can require students to use their first name as their nickname or something so we can get consistent.
+
