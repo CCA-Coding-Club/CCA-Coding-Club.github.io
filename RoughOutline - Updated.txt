@@ -7,7 +7,8 @@ Tech Stack:
 - HTML
 - CSS
 - JavaScript
-- MongoDB
+- Cloud Firestore (Firebase) <-- changed from MongoDB
+	- We changed this because of connection limitations of MongoDB Drivers from a static page
 - GitHub Pages
 
 MongoDB Structure:
@@ -25,6 +26,7 @@ We can add more data in the future too
 - Each document is structured as such: 
 "challengeId": string
 "memberName": string
+"lastActivityDate": date <-- need this to sort by most recent submissions because change to Firestore
 "submissionHistory": array that contains objects -->
 	{ "attempt": 1, "submissionDate": date, "submissionId": int }
 
