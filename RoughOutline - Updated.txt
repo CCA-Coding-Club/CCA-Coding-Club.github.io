@@ -75,5 +75,6 @@ Future Goals:
 DISCORD BOT IMPLEMENTATION
 Need command to submit to mongodb 
 something like: !submit challengeId "code"
-We can require students to use their first name as their nickname or something so we can get consistent.
+We can require students to use their first name as their nickname or something so we can get consistent. Or we use their memberIds.
+Also, when submitting through discord, make sure to auto-id submissionids like in the submit button on the website
 

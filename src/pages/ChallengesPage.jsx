@@ -1,7 +1,21 @@
 import { useState } from 'react';
+import flourite from 'flourite';
 import { useSearchParams } from 'react-router-dom';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import cpp from 'react-syntax-highlighter/dist/esm/languages/prism/cpp';
+import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
+import java from 'react-syntax-highlighter/dist/esm/languages/prism/java';
+import csharp from 'react-syntax-highlighter/dist/esm/languages/prism/csharp';
+
+SyntaxHighlighter.registerLanguage('cpp', cpp);
+SyntaxHighlighter.registerLanguage('c++', cpp);       // Flourite match
+SyntaxHighlighter.registerLanguage('python', python);
+SyntaxHighlighter.registerLanguage('javascript', javascript);
+SyntaxHighlighter.registerLanguage('java', java);
+SyntaxHighlighter.registerLanguage('csharp', csharp);
+SyntaxHighlighter.registerLanguage('c#', csharp);     // Flourite match
 import { useChallenges } from '../hooks/useChallenges';
 import { useSubmissions } from '../hooks/useSubmissions';
 import ChallengeCard from '../components/ChallengeCard';
@@ -116,7 +130,7 @@ function SolutionsPanel({ challengeId }) {
 
   if (loading && submissions.length === 0) return <Loading text="Loading submissions..." />;
   if (error) return <Error message={error} />;
-  if (submissions.length === 0) return <Empty title="No submissions yet" description="Be the first to submit!" />;
+  if (submissions.length === 0) return <Empty title="No submissions yet" description="Be the first to submit over the CCA Coding Club Discord!" />;
 
   return (
     <div className="solutions">
@@ -127,49 +141,102 @@ function SolutionsPanel({ challengeId }) {
 
       <div className="solutions__body">
         {submissions.map(sub => (
-          <div className="member-group" key={sub.memberName}>
-            <div className="member-group__name">
-              {sub.memberName} — {sub.submissionHistory.length} attempt(s)
-            </div>
-
-            {sub.submissionHistory
-              .sort((a, b) => b.attempt - a.attempt)
-              .map(attempt => {
-                const code = codeMap[attempt.submissionId];
-                return (
-                  <div className="attempt" key={attempt.submissionId}>
-                    <div className="attempt__header">
-                      <span>Attempt #{attempt.attempt}</span>
-                      <span>{new Date(attempt.submissionDate).toLocaleDateString()}</span>
-                    </div>
-                    {code ? (
-                      <SyntaxHighlighter
-                        language={guessLang(code.submissionCode)}
-                        style={oneDark}
-                        customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem' }}
-                        showLineNumbers
-                      >
-                        {code.submissionCode}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <p style={{ padding: '0.75rem', color: 'var(--text-dim)', fontSize: '0.85rem' }}>
-                        {loading ? 'Loading code...' : 'Code not available'}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-          </div>
+          <MemberSubmissionGroup key={sub.memberName} sub={sub} codeMap={codeMap} loading={loading} />
         ))}
       </div>
     </div>
   );
 }
 
-/** Basic language guess for syntax highlighting */
+/** Component to manage a single member's attempt pagination */
+function MemberSubmissionGroup({ sub, codeMap, loading }) {
+  const [attemptIdx, setAttemptIdx] = useState(0);
+
+  // Sort history newest to oldest
+  const history = [...sub.submissionHistory].sort((a, b) => b.attempt - a.attempt);
+
+  const currentAttempt = history[attemptIdx];
+  const code = currentAttempt ? codeMap[currentAttempt.submissionId] : null;
+
+  return (
+    <div className="member-group">
+      <div className="member-group__name" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>{sub.memberName} — {history.length} attempt(s)</span>
+
+        {/* Pagination Controls */}
+        {history.length > 1 && (
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', fontSize: '0.85rem' }}>
+            <button
+              className="btn btn--secondary"
+              style={{ padding: '0.2rem 0.5rem' }}
+              disabled={attemptIdx === 0}
+              onClick={() => setAttemptIdx(prev => prev - 1)}
+            >
+              ← Newer
+            </button>
+            <span style={{ color: 'var(--text-dim)' }}>
+              {attemptIdx + 1} / {history.length}
+            </span>
+            <button
+              className="btn btn--secondary"
+              style={{ padding: '0.2rem 0.5rem' }}
+              disabled={attemptIdx === history.length - 1}
+              onClick={() => setAttemptIdx(prev => prev + 1)}
+            >
+              Older →
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="attempt">
+        <div className="attempt__header">
+          <span>Attempt #{currentAttempt.attempt}</span>
+          <span>{new Date(currentAttempt.submissionDate).toLocaleDateString()}</span>
+        </div>
+        {code ? (
+          <div style={{ position: 'relative' }}>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              padding: '0.2rem 0.6rem',
+              fontSize: '0.7rem',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--text-dim)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderBottomLeftRadius: 'var(--radius)',
+              textTransform: 'uppercase',
+              pointerEvents: 'none'
+            }}>
+              {guessLang(code.submissionCode)}
+            </div>
+            <SyntaxHighlighter
+              language={guessLang(code.submissionCode)}
+              style={oneDark}
+              customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem' }}
+              showLineNumbers
+            >
+              {code.submissionCode}
+            </SyntaxHighlighter>
+          </div>
+        ) : (
+          <p style={{ padding: '0.75rem', color: 'var(--text-dim)', fontSize: '0.85rem' }}>
+            {loading ? 'Loading code...' : 'Code not available'}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** Heuristic language guesser using Fluorite ML (this is light weight, only adds 6kb to bundle size) */
 function guessLang(code) {
-  if (code.includes('#include') || code.includes('cout')) return 'cpp';
-  if (code.includes('def ') || code.includes('print(')) return 'python';
-  if (code.includes('console.log') || code.includes('const ')) return 'javascript';
-  return 'text';
+  try {
+    const lang = flourite(code, { noUnknown: true }).language;
+    if (lang === 'Unknown') return 'text'; //this is so that it doesn't crash the highlighter
+    return lang.toLowerCase();
+  } catch (e) {
+    return 'text';
+  }
 }
