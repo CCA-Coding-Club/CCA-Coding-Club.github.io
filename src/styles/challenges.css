@@ -53,10 +53,7 @@
   margin-bottom: 0.4rem;
 }
 
-.challenge-card__date {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
+
 
 .challenge-card__desc {
   font-size: 0.85rem;
@@ -168,10 +165,28 @@
   margin-bottom: 1.5rem;
 }
 
-.member-group__name {
+.member-group__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 600;
   color: var(--accent);
   margin-bottom: 0.75rem;
+}
+
+.member-group__pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.member-group__page-info {
+  color: var(--text-dim);
+}
+
+.btn--small {
+  padding: 0.2rem 0.5rem;
 }
 
 .attempt {
@@ -190,6 +205,32 @@
   border-bottom: 1px solid var(--border);
   font-size: 0.75rem;
   color: var(--text-dim);
+}
+
+.attempt__placeholder {
+  padding: 0.75rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+/* ── Code Block ── */
+.code-block {
+  position: relative;
+}
+
+.code-block__lang {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom-left-radius: var(--radius);
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ── Loading / Empty / Error ── */

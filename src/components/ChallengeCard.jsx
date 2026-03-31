@@ -1,5 +1,8 @@
 /**
- * Challenge card tile for the grid.
+ * ChallengeCard — a clickable tile in the challenges grid.
+ * 
+ * Shows the challenge date, name, and a short description.
+ * When clicked, the parent ChallengesPage expands a DetailPanel.
  */
 export default function ChallengeCard({ challenge, isActive, onClick }) {
   const date = new Date(challenge.challengeCreation).toLocaleDateString('en-US', {
@@ -15,10 +18,9 @@ export default function ChallengeCard({ challenge, isActive, onClick }) {
       onKeyDown={(e) => (e.key === 'Enter') && onClick()}
     >
       <div className="challenge-card__label">
-        Challenge #{challenge.challengeId.split('-').pop()}
+        {date}
       </div>
       <h3 className="challenge-card__name">{challenge.challengeName}</h3>
-      <div className="challenge-card__date">📅 {date}</div>
       {challenge.challengeDescription && (
         <p className="challenge-card__desc">{challenge.challengeDescription}</p>
       )}
