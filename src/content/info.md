@@ -1,4 +1,4 @@
-# Coding Club
+# Welcome to the Coding Club GitHub
 
 [![GitHub stars](https://img.shields.io/github/stars/westonmook/Coding_Club?style=flat-square)](https://github.com/YourUsername/Coding-Club/stargazers) <!-- Stars Badge -->
 [![GitHub forks](https://img.shields.io/github/forks/westonmook/Coding_Club?style=flat-square)](https://github.com/YourUsername/Coding-Club/forks) <!-- Forks Badge -->
@@ -130,20 +130,22 @@ To contribute:
 
 ---
 
+## Location / Meetings
+- **Location:** Room 114 CentreTech Classroom Building
+- **Meetings:** Friday 1:00 pm - 3:30 pm 
+
 ## Contact
 
 If you’d like to get involved or have questions:
-- **Email:** ... 
-- **Discord:** ... 
-- **WhatsApp:** ... 
+- **Email:** wmook@student.cccs.edu
+- **Discord:** https://discord.gg/BtkhmyvB
+- **WhatsApp:** Available upon request
 - **GitHub Discussions:** Use the “Discussions” tab to connect with others  
 
 ---
 
 ### Ready to Start Learning?
 Head to the [Wiki Home Page](../../wiki) and begin with our **[Python Basics](../../wiki/Python)** guide!
-
-<!-- New cool stuff -->
 
 ---
 

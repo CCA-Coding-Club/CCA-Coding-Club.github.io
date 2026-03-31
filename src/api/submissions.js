@@ -1,6 +1,15 @@
+/**
+ * Submissions READ module.
+ * 
+ * ID conventions:
+ *   ChallengeSubmissions    → doc ID = "{challengeId}_{memberName}"
+ *   ChallengeSubmissionsCode → doc ID = submissionId (auto-generated string)
+ * 
+ * submissionHistory[].submissionId links to ChallengeSubmissionsCode doc IDs.
+ * See write.js for how these are created atomically.
+ */
 import { collection, query, where, orderBy, limit, getDocs, startAfter } from 'firebase/firestore';
-import { db, USE_MOCK } from './config';
-import { mockSubmissions, mockSubmissionCode } from './mockData';
+import { db } from './config';
 
 const PAGE_SIZE = 15;
 
@@ -11,14 +20,6 @@ const PAGE_SIZE = 15;
  * @param {Object} lastVisibleDoc - The last document snapshot from the previous query
  */
 export async function getSubmissions(challengeId, lastVisibleDoc = null) {
-  if (USE_MOCK) {
-    await new Promise(r => setTimeout(r, 600));
-    const filtered = mockSubmissions.filter(s => s.challengeId === challengeId);
-    // Sort mock data by the newly added lastActivityDate
-    filtered.sort((a, b) => new Date(b.lastActivityDate) - new Date(a.lastActivityDate));
-    return { data: filtered, nextCursor: null };
-  }
-
   const submissionsRef = collection(db, "ChallengeSubmissions");
   
   let q;
@@ -70,11 +71,6 @@ function chunkArray(arr, size) {
  */
 export async function getCodeBatch(submissionIds) {
   if (!submissionIds || submissionIds.length === 0) return [];
-
-  if (USE_MOCK) {
-    await new Promise(r => setTimeout(r, 400));
-    return mockSubmissionCode.filter(c => submissionIds.includes(c.submissionId));
-  }
 
   // Firestore "in" queries max out at 30 items. We must split arrays larger than 30.
   const chunks = chunkArray(submissionIds, 30);

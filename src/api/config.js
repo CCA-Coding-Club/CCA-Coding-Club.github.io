@@ -10,22 +10,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Fall back to Mock Data if the API key hasn't been added yet
-export const USE_MOCK = !firebaseConfig.apiKey;
-
-let app;
-let db;
-
-if (!USE_MOCK) {
-  try {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    console.log("[Firebase] Initialized successfully");
-  } catch (error) {
-    console.error("[Firebase] Initialization error:", error);
-  }
-} else {
-  console.log("[Firebase] No API config found. Running in MOCK Mode.");
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export { db };

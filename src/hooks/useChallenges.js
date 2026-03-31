@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getChallenges } from '../api/challenges';
 
 export function useChallenges() {
@@ -10,10 +10,10 @@ export function useChallenges() {
   const [lastCursor, setLastCursor] = useState(null);
   const [hasMore, setHasMore] = useState(false);
 
-  // Initial fetch
-  useState(() => {
+  // Fetch challenges on first mount
+  useEffect(() => {
     fetchChallenges(null, true);
-  });
+  }, []);
 
   async function fetchChallenges(cursor = null, isReset = false) {
     if (isReset) {

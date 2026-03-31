@@ -1,3 +1,10 @@
+/**
+ * NavBar — the top navigation bar, shared across all pages.
+ * 
+ * Shows the club logo/brand + page links on desktop.
+ * On mobile (<640px), the links collapse into a hamburger menu.
+ * The menu auto-closes when the user navigates to a new page.
+ */
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import '../styles/navbar.css';

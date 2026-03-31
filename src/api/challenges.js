@@ -1,21 +1,20 @@
+/**
+ * Challenges READ module.
+ * 
+ * ID convention: challengeId IS the Firestore document ID.
+ * See write.js for how challenges are created with this guarantee.
+ */
 import { collection, doc, query, orderBy, limit, getDocs, getDoc, startAfter } from 'firebase/firestore';
-import { db, USE_MOCK } from './config';
-import { mockChallenges } from './mockData';
+import { db } from './config';
 
 const PAGE_SIZE = 10;
 
 /**
  * Fetch a paginated list of challenges.
- * Uses Firebase Admin/Firestore logic structure.
  * 
  * @param {Object} lastVisibleDoc - The Firestore document snapshot from the previous page. Null for page 1.
  */
 export async function getChallenges(lastVisibleDoc = null) {
-  if (USE_MOCK) {
-    await new Promise(r => setTimeout(r, 600));
-    return { data: mockChallenges, nextCursor: null };
-  }
-
   const challengesRef = collection(db, "Challenges");
   
   let q;
@@ -41,11 +40,6 @@ export async function getChallenges(lastVisibleDoc = null) {
  * Fetch a single challenge by its ID.
  */
 export async function getChallengeById(id) {
-  if (USE_MOCK) {
-    await new Promise(r => setTimeout(r, 400));
-    return mockChallenges.find(c => c.challengeId === id) || null;
-  }
-
   const docRef = doc(db, "Challenges", id);
   const docSnap = await getDoc(docRef);
 
