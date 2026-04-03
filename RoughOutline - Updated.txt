@@ -57,6 +57,10 @@ Challenges Page:
 	- refresh button to get most recent submissions
 - Submissions are grouped by student name, ordered by date (student's history with the most recent submission will appear first)
 
+API Encryption:
+- password in database to hashed string
+- XOR operation on get and push back
+
 Website Goals:
 - Make UI reusable and clean
 - Make project structure simple and reusable
@@ -88,5 +92,5 @@ Need command to submit to mongodb
 something like: !submit challengeId "code"
 We can require students to use their first name as their nickname or something so we can get consistent. Or we use their memberIds.
 Also, when submitting through discord, make sure to auto-id submissionids like in the submit button on the website.
-When challenges are submitted, it needs to be read from db what the latest id is so it doesn't conflict
+When challenges are submitted, it needs to be read from db what the latest id is so it doesn't conflict	
 
