@@ -1,0 +1,18 @@
+/* Design Tokens — colors, fonts, sizes used across the entire site */
+:root {
+  --bg: #0f1117;
+  --bg-card: #1a1d2e;
+  --bg-hover: #222640;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --border: rgba(148, 163, 184, 0.15);
+
+  --font: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --max-width: 1100px;
+  --nav-height: 56px;
+  --radius: 8px;
+}
