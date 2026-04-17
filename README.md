@@ -6,7 +6,7 @@ The official website for the Community College of Aurora Coding Club.
 
 - **HTML / CSS / JavaScript** — no frameworks, no build step
 - **Firebase Cloud Firestore** — stores student challenge submissions
-- **GitHub API** — challenges are pulled from a separate repo ([coding-challenges](https://github.com/CCA-Coding-Club/coding-challenges))
+- **GitHub API** — challenges are pulled from a separate repo ([challenges](https://github.com/CCA-Coding-Club/challenges))
 - **GitHub Pages** — hosts the site as static files
 
 ## How It Works
@@ -15,7 +15,7 @@ The official website for the Community College of Aurora Coding Club.
 Fetches `content/info.md` and renders it as markdown using [marked.js](https://marked.js.org/).
 
 **Challenges Page** (`pages/challenges.html`)  
-1. Fetches the challenge folder list from the `coding-challenges` repo via the GitHub Trees API (1 API call)
+1. Fetches the challenge folder list from the `challenges` repo via the GitHub Trees API (1 API call)
 2. Fetches each challenge's `meta.json` and `challenge.md` from `raw.githubusercontent.com` (no rate limit)
 3. When "View Solutions" is clicked, queries Firestore for student submissions
 
