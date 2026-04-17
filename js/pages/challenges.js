@@ -11,7 +11,7 @@
 // ---- Configuration ----
 // Change these if the repo name or org changes
 var GITHUB_ORG = "CCA-Coding-Club";
-var GITHUB_REPO = "coding-challenges";
+var GITHUB_REPO = "challenges";
 var GITHUB_BRANCH = "main";
 
 // Base URL for fetching raw file content (no rate limit)
@@ -80,8 +80,10 @@ async function fetchMeta(folderName) {
     if (!response.ok) throw new Error("No meta.json");
     return await response.json();
   } catch (e) {
-    // If there's no meta.json, just use the folder name as the title
-    return { title: folderName, date: "", description: "" };
+    // If there's no meta.json, use the folder name as a readable title
+    // "fizzbuzz-remix" becomes "Fizzbuzz Remix"
+    var title = folderName.replace(/-/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    return { title: title, date: "", description: "" };
   }
 }
 
