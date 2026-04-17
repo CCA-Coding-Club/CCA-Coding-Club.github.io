@@ -3,9 +3,10 @@
  *
  * How it works:
  * 1. Calls the GitHub API once to get the list of challenge folders
- * 2. Fetches each folder's meta.json for title/date/description
- * 3. Renders clickable cards in the grid
- * 4. When a card is clicked, fetches the challenge.md and shows it
+ * 2. Fetches each folder's challenge.md
+ * 3. Parses front matter (metadata between --- delimiters at the top)
+ * 4. Renders clickable cards in the grid
+ * 5. When a card is clicked, shows the challenge content
  */
 
 // ---- Configuration ----
@@ -49,11 +50,11 @@ async function loadAllChallenges() {
       }
     }
 
-    // Step 2: Fetch meta.json for each challenge folder
+    // Step 2: Fetch challenge.md for each folder and parse front matter
     var challenges = [];
     for (var i = 0; i < folders.length; i++) {
-      var meta = await fetchMeta(folders[i]);
-      challenges.push({ id: folders[i], title: meta.title, date: meta.date, description: meta.description });
+      var parsed = await fetchChallenge(folders[i]);
+      challenges.push(parsed);
     }
 
     // Step 3: Sort by date (newest first)
@@ -73,18 +74,73 @@ async function loadAllChallenges() {
   }
 }
 
-// Fetch the meta.json file for a challenge folder
-async function fetchMeta(folderName) {
+// Fetch challenge.md and parse front matter + content
+async function fetchChallenge(folderName) {
+  // Default values if anything goes wrong
+  var fallbackTitle = folderName.replace(/-/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  var result = { id: folderName, title: fallbackTitle, date: "", description: "", content: "" };
+
   try {
-    var response = await fetch(RAW_BASE + "/" + folderName + "/meta.json");
-    if (!response.ok) throw new Error("No meta.json");
-    return await response.json();
+    var response = await fetch(RAW_BASE + "/" + folderName + "/challenge.md");
+    if (!response.ok) return result;
+
+    var text = await response.text();
+    var parsed = parseFrontMatter(text);
+
+    result.title = parsed.meta.title || fallbackTitle;
+    result.date = parsed.meta.date || "";
+    result.description = parsed.meta.description || "";
+    result.content = parsed.body;
   } catch (e) {
-    // If there's no meta.json, use the folder name as a readable title
-    // "fizzbuzz-remix" becomes "Fizzbuzz Remix"
-    var title = folderName.replace(/-/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
-    return { title: title, date: "", description: "" };
+    // If fetch fails, return defaults
   }
+
+  return result;
+}
+
+/*
+ * Parse front matter from a markdown string.
+ *
+ * Front matter is metadata between --- delimiters at the top of the file:
+ *
+ *   ---
+ *   title: My Challenge
+ *   date: 2026-04-17
+ *   description: A short summary
+ *   ---
+ *
+ *   # The actual markdown content...
+ *
+ * Returns { meta: { title, date, description }, body: "markdown content" }
+ */
+function parseFrontMatter(text) {
+  var meta = {};
+  var body = text;
+
+  // Check if the file starts with ---
+  if (text.trimStart().startsWith("---")) {
+    var trimmed = text.trimStart();
+    // Find the closing ---
+    var endIndex = trimmed.indexOf("---", 3);
+
+    if (endIndex !== -1) {
+      var frontMatter = trimmed.substring(3, endIndex).trim();
+      body = trimmed.substring(endIndex + 3).trim();
+
+      // Parse each line as "key: value"
+      var lines = frontMatter.split("\n");
+      for (var i = 0; i < lines.length; i++) {
+        var colonIndex = lines[i].indexOf(":");
+        if (colonIndex !== -1) {
+          var key = lines[i].substring(0, colonIndex).trim();
+          var value = lines[i].substring(colonIndex + 1).trim();
+          meta[key] = value;
+        }
+      }
+    }
+  }
+
+  return { meta: meta, body: body };
 }
 
 // ---- Rendering ----
@@ -152,17 +208,12 @@ async function selectChallenge(id) {
       })
     : "";
 
-  // Load and render the challenge markdown
+  // Render the challenge content (already fetched during load)
   var body = document.getElementById("detail-body");
-  body.innerHTML = '<p class="status-message">Loading...</p>';
-
-  try {
-    var response = await fetch(RAW_BASE + "/" + id + "/challenge.md");
-    if (!response.ok) throw new Error("Failed to load");
-    var markdown = await response.text();
-    body.innerHTML = marked.parse(markdown);
-  } catch (e) {
-    body.innerHTML = '<p class="status-message">Could not load challenge details.</p>';
+  if (challenge.content) {
+    body.innerHTML = marked.parse(challenge.content);
+  } else {
+    body.innerHTML = '<p class="status-message">No challenge details available.</p>';
   }
 
   // Show the panel, reset solutions
