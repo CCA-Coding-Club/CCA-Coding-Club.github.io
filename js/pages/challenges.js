@@ -68,6 +68,10 @@ async function loadAllChallenges() {
 
     // Step 4: Render the cards
     renderCards(challenges);
+
+    // Step 5: If the URL has a #hash, auto-open that challenge
+    var hash = window.location.hash.substring(1);
+    if (hash) selectChallenge(hash);
   } catch (error) {
     grid.innerHTML = '<div class="status-message"><h3>Error</h3><p>Could not load challenges. Check your connection.</p></div>';
     console.error("Failed to load challenges:", error);
@@ -166,6 +170,23 @@ function renderCards(challenges) {
   grid.innerHTML = html;
 }
 
+// Filter challenges based on the search bar
+function filterChallenges() {
+  var input = document.getElementById("challenge-search").value.toLowerCase();
+  var cards = document.querySelectorAll(".challenge-card");
+
+  for (var i = 0; i < cards.length; i++) {
+    var title = cards[i].querySelector(".challenge-card__name").textContent.toLowerCase();
+    var desc = cards[i].querySelector(".challenge-card__desc").textContent.toLowerCase();
+
+    if (title.indexOf(input) > -1 || desc.indexOf(input) > -1) {
+      cards[i].style.display = "";
+    } else {
+      cards[i].style.display = "none";
+    }
+  }
+}
+
 // ---- Detail Panel ----
 
 // Called when a challenge card is clicked
@@ -226,6 +247,9 @@ async function selectChallenge(id) {
   var solBtn = document.getElementById("toggle-solutions-btn");
   solBtn.textContent = "View Solutions";
   solBtn.classList.remove("btn--primary");
+
+  // Update the URL hash so people can share this link
+  window.history.replaceState(null, "", "#" + id);
 }
 
 // Close the detail panel
@@ -236,6 +260,8 @@ function closeDetail() {
   for (var i = 0; i < cards.length; i++) {
     cards[i].classList.remove("active");
   }
+  // Clear the hash from the URL
+  window.history.replaceState(null, "", window.location.pathname);
 }
 
 // Toggle student submissions (from Firestore)
@@ -386,5 +412,28 @@ function switchLanguage() {
 
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].style.display = (parseInt(blocks[i].getAttribute("data-lang-idx")) === idx) ? "" : "none";
+  }
+}
+
+// ---- Submit Solution Modal ----
+
+function openSubmitModal() {
+  var modal = document.getElementById("submit-modal");
+  if (!modal) return;
+  
+  // Clear previous inputs
+  document.getElementById("submit-name").value = "";
+  document.getElementById("submit-code").value = "";
+  document.getElementById("submit-error").textContent = "";
+  document.getElementById("submit-btn").disabled = false;
+  document.getElementById("submit-btn").textContent = "Submit";
+  
+  modal.style.display = "flex";
+}
+
+function closeSubmitModal() {
+  var modal = document.getElementById("submit-modal");
+  if (modal) {
+    modal.style.display = "none";
   }
 }

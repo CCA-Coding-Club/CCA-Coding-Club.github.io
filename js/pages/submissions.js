@@ -126,11 +126,18 @@ async function loadVisibleCode() {
 
       if (doc.exists) {
         var code = doc.data().submissionCode;
-        codeContainer.innerHTML = '<pre><code>' + escapeHtml(code) + '</code></pre>';
-
-        // Apply syntax highlighting if available
-        var codeEl = codeContainer.querySelector("code");
-        if (window.hljs) hljs.highlightElement(codeEl);
+        var languageName = "";
+        var codeHtml = escapeHtml(code);
+        
+        // Auto-detect language and highlight if available
+        if (window.hljs) {
+          var result = hljs.highlightAuto(code);
+          codeHtml = result.value; // The library returns pre-escaped HTML here
+          languageName = result.language || "text";
+        }
+        
+        var langBadge = languageName ? '<div class="attempt__lang">' + languageName + '</div>' : '';
+        codeContainer.innerHTML = langBadge + '<pre><code class="hljs">' + codeHtml + '</code></pre>';
       } else {
         codeContainer.innerHTML = '<p class="attempt__placeholder">Code not available</p>';
       }
@@ -182,4 +189,94 @@ function escapeHtml(text) {
   var div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ---- Submitting Code ----
+
+async function submitSolution() {
+  // Uses selectedChallengeId from challenges.js
+  if (!selectedChallengeId) return;
+
+  var nameInput = document.getElementById("submit-name");
+  var codeInput = document.getElementById("submit-code");
+  var errorEl = document.getElementById("submit-error");
+  var submitBtn = document.getElementById("submit-btn");
+
+  var memberName = nameInput.value.trim();
+  var code = codeInput.value.trim();
+
+  if (!memberName) {
+    errorEl.textContent = "Please enter your Member Name.";
+    return;
+  }
+  if (!code) {
+    errorEl.textContent = "Please paste your code before submitting.";
+    return;
+  }
+
+  errorEl.textContent = "";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try {
+    // Generate the exact same document ID structure the discord bot uses
+    var subDocId = selectedChallengeId + "_" + memberName;
+    var subRef = db.collection('ChallengeSubmissions').doc(subDocId);
+    
+    // Check if member already has submissions for this challenge to determine attempt number
+    var subDoc = await subRef.get();
+    var attemptNumber = 1;
+    if (subDoc.exists) {
+      var history = subDoc.data().submissionHistory || [];
+      attemptNumber = history.length + 1;
+    }
+
+    // Always append "Z" for standard UTC string parity if we aren't using an exact ISO.
+    // The standard .toISOString() does this.
+    var now = new Date().toISOString();
+    
+    // 1. Create code ref
+    var codeRef = db.collection('ChallengeSubmissionsCode').doc();
+    var submissionId = codeRef.id;
+
+    // 2. Setup batch
+    var batch = db.batch();
+
+    batch.set(codeRef, {
+      submissionId: submissionId,
+      submissionDate: now,
+      submissionCode: code
+    });
+
+    batch.set(subRef, {
+      challengeId: selectedChallengeId,
+      memberName: memberName,
+      lastActivityDate: now,
+      submissionHistory: firebase.firestore.FieldValue.arrayUnion({
+        attempt: attemptNumber,
+        submissionDate: now,
+        submissionId: submissionId
+      })
+    }, { merge: true });
+
+    // 3. Commit
+    await batch.commit();
+
+    // Reset and close modal
+    closeSubmitModal();
+    
+    // Auto-open or refresh the submissions tab
+    var subContainer = document.getElementById("submissions-container");
+    if (!subContainer.innerHTML.trim()) {
+      toggleSubmissions(); 
+    } else {
+      loadSubmissions(selectedChallengeId); 
+    }
+
+  } catch (err) {
+    console.error("Failed to submit solution:", err);
+    errorEl.textContent = "Submission failed! Check connection or contact an admin.";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit";
+  }
 }
