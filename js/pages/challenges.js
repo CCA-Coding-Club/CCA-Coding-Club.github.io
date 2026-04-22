@@ -216,12 +216,16 @@ async function selectChallenge(id) {
     body.innerHTML = '<p class="status-message">No challenge details available.</p>';
   }
 
-  // Show the panel, reset solutions
+  // Show the panel, reset both containers
   panel.classList.add("open");
+  document.getElementById("submissions-container").innerHTML = "";
   document.getElementById("solutions-container").innerHTML = "";
-  var btn = document.getElementById("toggle-solutions-btn");
-  btn.textContent = "View Solutions";
-  btn.classList.remove("btn--primary");
+  var subBtn = document.getElementById("toggle-submissions-btn");
+  subBtn.textContent = "View Submissions";
+  subBtn.classList.remove("btn--primary");
+  var solBtn = document.getElementById("toggle-solutions-btn");
+  solBtn.textContent = "View Solutions";
+  solBtn.classList.remove("btn--primary");
 }
 
 // Close the detail panel
@@ -234,20 +238,153 @@ function closeDetail() {
   }
 }
 
-// Toggle the solutions section
-function toggleSolutions() {
+// Toggle student submissions (from Firestore)
+function toggleSubmissions() {
+  var container = document.getElementById("submissions-container");
+  var btn = document.getElementById("toggle-submissions-btn");
+
+  if (container.innerHTML.trim()) {
+    container.innerHTML = "";
+    btn.textContent = "View Submissions";
+    btn.classList.remove("btn--primary");
+  } else {
+    btn.textContent = "Hide Submissions";
+    btn.classList.add("btn--primary");
+    loadSubmissions(selectedChallengeId);
+  }
+}
+
+// Toggle official solutions (from the challenges repo)
+function toggleOfficialSolutions() {
   var container = document.getElementById("solutions-container");
   var btn = document.getElementById("toggle-solutions-btn");
 
   if (container.innerHTML.trim()) {
-    // Already showing — hide
     container.innerHTML = "";
     btn.textContent = "View Solutions";
     btn.classList.remove("btn--primary");
   } else {
-    // Show solutions
     btn.textContent = "Hide Solutions";
     btn.classList.add("btn--primary");
-    loadSubmissions(selectedChallengeId);
+    loadOfficialSolutions(selectedChallengeId);
+  }
+}
+
+// Fetch and display solutions.md from the challenges repo
+async function loadOfficialSolutions(challengeId) {
+  var container = document.getElementById("solutions-container");
+  if (!container || !challengeId) return;
+
+  container.innerHTML = '<div class="status-message">Loading solutions...</div>';
+
+  try {
+    var response = await fetch(RAW_BASE + "/" + challengeId + "/solutions.md");
+
+    if (!response.ok) {
+      container.innerHTML =
+        '<div class="solutions"><div class="solutions__body">' +
+        '<div class="status-message"><h3>No solutions yet</h3>' +
+        '<p>Solutions will be posted by club leaders after the challenge.</p></div>' +
+        '</div></div>';
+      return;
+    }
+
+    var text = await response.text();
+    var languages = parseSolutions(text);
+
+    if (languages.length === 0) {
+      container.innerHTML =
+        '<div class="solutions"><div class="solutions__body">' +
+        '<div class="status-message"><h3>No solutions yet</h3></div>' +
+        '</div></div>';
+      return;
+    }
+
+    // Build the dropdown and content
+    var html = '<div class="solutions">';
+    html += '<div class="solutions__header">';
+    html += '<h3>Official Solutions</h3>';
+
+    if (languages.length > 1) {
+      html += '<select id="language-select" class="language-select" onchange="switchLanguage()">';
+      for (var i = 0; i < languages.length; i++) {
+        html += '<option value="' + i + '">' + languages[i].name + '</option>';
+      }
+      html += '</select>';
+    }
+
+    html += '</div>';
+
+    // Render each language block (only first is visible)
+    for (var i = 0; i < languages.length; i++) {
+      var display = i === 0 ? "" : "display:none";
+      html += '<div class="solutions__body language-block" data-lang-idx="' + i + '" style="' + display + '">';
+      html += '<div class="markdown">' + marked.parse(languages[i].content) + '</div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+
+    // Apply syntax highlighting to code blocks
+    container.querySelectorAll("pre code").forEach(function (block) {
+      if (window.hljs) hljs.highlightElement(block);
+    });
+
+  } catch (error) {
+    container.innerHTML =
+      '<div class="status-message"><h3>Error</h3><p>Could not load solutions.</p></div>';
+    console.error("Solutions error:", error);
+  }
+}
+
+/*
+ * Parse solutions.md into language sections.
+ *
+ * Format: each --LanguageName line starts a new language section.
+ *
+ *   --Python
+ *   ```python
+ *   code here
+ *   ```
+ *
+ *   --JavaScript
+ *   ```javascript
+ *   code here
+ *   ```
+ *
+ * Returns [{ name: "Python", content: "..." }, { name: "JavaScript", content: "..." }]
+ */
+function parseSolutions(text) {
+  var languages = [];
+  var sections = text.split(/^--/m);
+
+  for (var i = 0; i < sections.length; i++) {
+    var section = sections[i].trim();
+    if (!section) continue;
+
+    // First line is the language name, rest is content
+    var newlineIndex = section.indexOf("\n");
+    if (newlineIndex === -1) continue;
+
+    var name = section.substring(0, newlineIndex).trim();
+    var content = section.substring(newlineIndex + 1).trim();
+
+    if (name && content) {
+      languages.push({ name: name, content: content });
+    }
+  }
+
+  return languages;
+}
+
+// Switch between language tabs in the solutions view
+function switchLanguage() {
+  var select = document.getElementById("language-select");
+  var idx = parseInt(select.value);
+  var blocks = document.querySelectorAll(".language-block");
+
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].style.display = (parseInt(blocks[i].getAttribute("data-lang-idx")) === idx) ? "" : "none";
   }
 }

@@ -163,6 +163,22 @@
   padding: 1rem 1.5rem;
 }
 
+/* Language dropdown for official solutions */
+.language-select {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.language-select:hover {
+  border-color: var(--accent);
+}
+
 /* Member submission groups */
 .member-group {
   margin-bottom: 1.5rem;
