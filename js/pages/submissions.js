@@ -1,7 +1,7 @@
 /*
  * submissions.js — Load and display student submissions from Firestore.
  *
- * When "View Solutions" is clicked on a challenge, this script:
+ * When "View Submissions" is clicked on a challenge, this script:
  * 1. Queries Firestore for all submissions for that challenge
  * 2. For each member, shows their attempts with the code they submitted
  * 3. If a member has multiple attempts, lets you page through them
@@ -13,7 +13,7 @@
 
 // Load submissions for a challenge and display them
 async function loadSubmissions(challengeId) {
-  var container = document.getElementById("solutions-container");
+  var container = document.getElementById("submissions-container");
   if (!container || !challengeId) return;
 
   container.innerHTML = '<div class="status-message">Loading submissions...</div>';
@@ -42,7 +42,7 @@ async function loadSubmissions(challengeId) {
 
     // Build the HTML for all submissions
     var html = '<div class="solutions">';
-    html += '<div class="solutions__header"><h3>Solutions (' + submissions.length + ')</h3></div>';
+    html += '<div class="solutions__header"><h3>Submissions (' + submissions.length + ')</h3></div>';
     html += '<div class="solutions__body">';
 
     for (var i = 0; i < submissions.length; i++) {
