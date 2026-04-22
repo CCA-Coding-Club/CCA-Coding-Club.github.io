@@ -62,6 +62,10 @@
         <button id="toggle-solutions-btn" class="btn" onclick="toggleOfficialSolutions()">
           View Solutions
         </button>
+        <div class="spacer" style="flex-grow: 1;"></div>
+        <button class="btn btn--primary" onclick="openSubmitModal()">
+          Create Submission
+        </button>
       </div>
 
       <!-- Student submissions from Firestore -->
@@ -70,6 +74,33 @@
       <!-- Official solutions from the challenges repo -->
       <div id="solutions-container"></div>
     </div>
+
+    <!-- Submit Modal -->
+    <div id="submit-modal" class="modal-overlay" style="display: none;">
+      <div class="modal">
+        <div class="modal__header">
+          <h3>Submit Solution</h3>
+          <button class="modal__close" onclick="closeSubmitModal()">✕</button>
+        </div>
+        <div class="modal__body">
+          <label class="modal__label">Member Name <span class="req">*</span></label>
+          <input type="text" id="submit-name" class="modal__input" placeholder="e.g. Alice" />
+
+          <label class="modal__label">Code <span class="req">*</span></label>
+          <textarea id="submit-code" class="modal__textarea" placeholder="Paste your code here..."></textarea>
+
+          <div id="submit-error" class="modal__error"></div>
+        </div>
+        <div class="modal__footer">
+          <button class="btn" onclick="closeSubmitModal()">Cancel</button>
+          <button id="submit-btn" class="btn btn--primary" onclick="submitSolution()">Submit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <input type="text" id="challenge-search" class="challenge-search" placeholder="Search challenges..."
+      oninput="filterChallenges()" />
 
     <!-- Challenge Cards Grid -->
     <div id="challenges-grid" class="challenges-grid">
