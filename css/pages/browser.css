@@ -1,0 +1,293 @@
+/* Browser Page — shared styles for Worksheets and Projects */
+
+.browser-page {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + 2rem) 1.5rem 4rem;
+}
+
+.browser-page h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+.browser-page > p {
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Language Cards */
+.browser-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.lang-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 2rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.lang-card:hover,
+.lang-card.active {
+  border-color: var(--accent);
+}
+
+.lang-card__name {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Side-by-side Layout */
+.browser-layout {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+/* Browser Panel (left — directory) */
+.browser-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: none;
+  width: 350px;
+  min-width: 300px;
+  flex-shrink: 0;
+  max-height: calc(100vh - var(--nav-height) - 12rem);
+  overflow-y: auto;
+  position: sticky;
+  top: calc(var(--nav-height) + 2rem);
+}
+
+.browser-panel.open {
+  display: block;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.breadcrumb__lang {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.breadcrumb__sep {
+  color: var(--text-dim);
+}
+
+.breadcrumb__link {
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.breadcrumb__link:hover {
+  color: var(--text);
+}
+
+.breadcrumb__current {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* File List */
+.file-table {
+  padding: 0.5rem 0;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.file-row:hover {
+  background: var(--bg-hover);
+}
+
+.file-row__icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.file-row__name {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.file-row__link {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.file-row__link:hover {
+  color: var(--accent);
+}
+
+.file-row__download {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-decoration: none;
+  color: var(--text-dim);
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.file-row__download:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.file-row__size {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* File Preview Panel (right — content) */
+.file-preview {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.file-preview.open {
+  display: block;
+}
+
+/* Stack vertically on small screens */
+@media (max-width: 768px) {
+  .browser-layout {
+    flex-direction: column;
+  }
+
+  .browser-panel {
+    width: 100%;
+    min-width: unset;
+    max-height: none;
+    position: static;
+  }
+}
+
+.file-preview__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.file-preview__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.file-preview__close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.file-preview__close:hover {
+  color: var(--text);
+}
+
+.file-preview__body {
+  padding: 1rem 1.5rem;
+  overflow-x: auto;
+}
+
+/* Fix list numbering in docx/markdown previews */
+.file-preview__body ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  counter-reset: none;
+}
+
+.file-preview__body ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.file-preview__body li {
+  margin-bottom: 0.4rem;
+  color: var(--text-dim);
+}
+
+.file-preview__body li p {
+  margin-bottom: 0;
+}
+
+/* Code preview */
+.file-preview__body pre {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.file-preview__body pre code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* Image preview */
+.preview-image {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+/* PDF preview */
+.preview-pdf {
+  width: 100%;
+  height: 600px;
+  border: none;
+  border-radius: var(--radius);
+}
+
+/* Status messages (reused) */
+.browser-page .status-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-dim);
+}
+
+.browser-page .status-message h3 {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
