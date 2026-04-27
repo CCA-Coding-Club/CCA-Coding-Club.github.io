@@ -6,25 +6,62 @@ The official website for the Community College of Aurora Coding Club.
 
 - **HTML / CSS / JavaScript** — no frameworks, no build step
 - **Firebase Cloud Firestore** — stores student challenge submissions
-- **GitHub API** — challenges are pulled from a separate repo ([challenges](https://github.com/CCA-Coding-Club/challenges))
+- **GitHub API** — challenges, worksheets, and projects are pulled from separate repos
 - **GitHub Pages** — hosts the site as static files
+
+### CDN Libraries (loaded per page, no install needed)
+
+| Library | Size | Used on | Purpose |
+|---------|------|---------|---------|
+| [marked.js](https://marked.js.org/) | ~40KB | Challenges, Worksheets, Projects | Render markdown |
+| [highlight.js](https://highlightjs.org/) | ~15KB | Challenges, Worksheets, Projects | Syntax highlighting |
+| [mammoth.js](https://github.com/mwilliamson/mammoth.js) | ~30KB | Worksheets, Projects | Render `.docx` files as HTML |
+| [Firebase Compat SDK](https://firebase.google.com/) | ~80KB | Challenges | Read/write submissions |
 
 ## How It Works
 
-**Info Page** (`index.html`)  
-Fetches `content/info.md` and renders it as markdown using [marked.js](https://marked.js.org/).
+**Info Page** (`index.html`)
+Fetches `content/info.md` and renders it as markdown.
 
-**Challenges Page** (`pages/challenges.html`)  
-1. Fetches the challenge folder list from the `challenges` repo via the GitHub Trees API (1 API call)
-2. Fetches each challenge's `meta.json` and `challenge.md` from `raw.githubusercontent.com` (no rate limit)
-3. When "View Solutions" is clicked, queries Firestore for student submissions
+**Challenges Page** (`pages/challenges.html`)
+1. Fetches challenge folders from the [`challenges`](https://github.com/CCA-Coding-Club/challenges) repo
+2. Parses front matter from each `challenge.md` for title/date/description
+3. "View Submissions" queries Firestore for student-submitted code
+4. "View Solutions" fetches `solutions.md` from the challenge folder (language dropdown)
+5. "Submit Solution" writes directly to Firestore via batch write
+
+**Worksheets Page** (`pages/worksheets.html`)
+GitHub-powered file browser. Shows language cards → fetches that repo's `Worksheets/` folder → displays files with inline preview (code, markdown, images, PDF, `.docx`).
+
+**Projects Page** (`pages/projects.html`)
+Same as Worksheets, but fetches the `Projects/` folder. Both pages share `browser.js`.
+
+## GitHub Repositories
+
+| Repo | What it holds | Used by |
+|------|--------------|---------|
+| [`challenges`](https://github.com/CCA-Coding-Club/challenges) | Challenge markdown files and solutions | Challenges page |
+| [`Python`](https://github.com/CCA-Coding-Club/Python) | Python worksheets and projects | Worksheets & Projects pages |
+| [`Cplusplus`](https://github.com/CCA-Coding-Club/Cplusplus) | C++ worksheets and projects | Worksheets & Projects pages |
+
+Each language repo follows this structure:
+```
+Python/
+├── Worksheets/     ← fetched by the Worksheets page
+│   ├── intro.py
+│   └── loops.docx
+└── Projects/       ← fetched by the Projects page
+    └── calculator/
+```
 
 ## Project Structure
 
 ```
 ├── index.html                      ← Homepage (root for GitHub Pages)
 ├── pages/                          ← All other pages go here
-│   └── challenges.html
+│   ├── challenges.html
+│   ├── worksheets.html
+│   └── projects.html
 │
 ├── content/                        ← Editable content (markdown files)
 │   └── info.md
@@ -38,7 +75,8 @@ Fetches `content/info.md` and renders it as markdown using [marked.js](https://m
 │   │   └── markdown.css            ← Rendered markdown content
 │   └── pages/                      ← Styles specific to one page
 │       ├── info.css
-│       └── challenges.css
+│       ├── challenges.css
+│       └── browser.css             ← Shared by Worksheets & Projects
 │
 ├── js/
 │   ├── base/                       ← Config and setup, loaded first
@@ -48,7 +86,8 @@ Fetches `content/info.md` and renders it as markdown using [marked.js](https://m
 │   │   └── markdown.js             ← Fetch and render .md files
 │   └── pages/                      ← Logic specific to one page
 │       ├── challenges.js           ← Fetch challenges from GitHub
-│       └── submissions.js          ← Fetch submissions from Firestore
+│       ├── submissions.js          ← Fetch/create submissions from Firestore
+│       └── browser.js              ← Shared file browser for Worksheets & Projects
 │
 └── assets/                         ← Images, icons, graphics
     ├── favicon.svg
@@ -74,6 +113,29 @@ This pattern is the same for both `css/` and `js/`, so once you learn it for one
    ```
 
 The navbar updates automatically on every page.
+
+## Adding a New Language
+
+Add one line to the `LANGUAGES` array in `js/pages/browser.js`:
+
+```js
+{ name: "Java", repo: "Java" },
+```
+
+Then create the repo on GitHub with `Worksheets/` and `Projects/` folders.
+
+## File Preview Support
+
+The Worksheets and Projects pages can preview files inline:
+
+| File type | How it's rendered |
+|-----------|------------------|
+| `.py`, `.js`, `.cpp`, `.java`, `.txt`, etc. | Syntax-highlighted code block |
+| `.md` | Rendered markdown |
+| `.png`, `.jpg`, `.svg`, `.gif` | Inline image |
+| `.pdf` | Embedded PDF viewer |
+| `.docx` | Converted to HTML via mammoth.js |
+| Other | Opens in new tab / download link |
 
 ## Running Locally
 

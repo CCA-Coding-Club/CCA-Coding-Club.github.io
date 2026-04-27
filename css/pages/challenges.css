@@ -8,11 +8,13 @@
 .challenges-page h1 {
   font-size: 2rem;
   margin-bottom: 0.25rem;
+  text-align: center;
 }
 
 .challenges-page > p {
   color: var(--text-dim);
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 /* Search Bar */

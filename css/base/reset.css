@@ -1,5 +1,7 @@
 /* Base Reset — normalize browser defaults */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -26,5 +28,11 @@ button {
   font-family: inherit;
 }
 
-ul { list-style: none; }
-code, pre { font-family: var(--font-mono); }
+ul {
+  list-style: none;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
