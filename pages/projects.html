@@ -62,7 +62,10 @@
       <div id="file-preview" class="file-preview">
         <div class="file-preview__header">
           <span class="file-preview__title" id="preview-title"></span>
-          <button class="file-preview__close" onclick="closePreview()">✕</button>
+          <div class="file-preview__actions">
+            <button class="file-preview__dl" id="preview-download" title="Download">⬇ Download</button>
+            <button class="file-preview__close" onclick="closePreview()">✕</button>
+          </div>
         </div>
         <div class="file-preview__body" id="preview-body"></div>
       </div>

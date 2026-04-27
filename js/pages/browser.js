@@ -173,8 +173,19 @@ function renderFileList(items) {
         html += '<span class="file-row__name file-row__link">' + item.name + '</span>';
       }
 
-      html += '<button class="file-row__download" onclick="event.stopPropagation(); downloadFile(\'' + escapeAttr(rawUrl) + '\', \'' + escapeAttr(item.name) + '\')" title="Download">Download</button>';
+      // Three-dot context menu
       html += '<span class="file-row__size">' + sizeStr + '</span>';
+      html += '<div class="file-row__menu-wrap">';
+      html += '<button class="file-row__dots" onclick="event.stopPropagation(); toggleContextMenu(this)" title="Options">⋮</button>';
+      html += '<div class="context-menu">';
+      if (previewType) {
+        html += '<button class="context-menu__item" onclick="event.stopPropagation(); closeAllMenus(); previewFile(\'' + escapeAttr(item.fullPath) + '\', \'' + escapeAttr(item.name) + '\')">View</button>';
+      } else {
+        html += '<button class="context-menu__item" onclick="event.stopPropagation(); closeAllMenus(); window.open(\'' + escapeAttr(rawUrl) + '\', \'_blank\')">View</button>';
+      }
+      html += '<button class="context-menu__item" onclick="event.stopPropagation(); closeAllMenus(); downloadFile(\'' + escapeAttr(rawUrl) + '\', \'' + escapeAttr(item.name) + '\')">Download</button>';
+      html += '</div>';
+      html += '</div>';
       html += '</div>';
     }
   }
@@ -189,6 +200,7 @@ async function previewFile(fullPath, fileName) {
   var preview = document.getElementById("file-preview");
   var previewTitle = document.getElementById("preview-title");
   var previewBody = document.getElementById("preview-body");
+  var previewDl = document.getElementById("preview-download");
 
   previewTitle.textContent = fileName;
   previewBody.innerHTML = '<div class="status-message">Loading preview...</div>';
@@ -197,6 +209,9 @@ async function previewFile(fullPath, fileName) {
   var rawUrl = getRawUrl(fullPath);
   var ext = getExtension(fileName);
   var type = getPreviewType(ext);
+
+  // Wire up the download button in the preview header
+  previewDl.onclick = function () { downloadFile(rawUrl, fileName); };
 
   try {
     if (type === "code") {
@@ -244,6 +259,33 @@ function closePreview() {
   var preview = document.getElementById("file-preview");
   if (preview) preview.classList.remove("open");
 }
+
+// ---- Context Menu ----
+
+function toggleContextMenu(btn) {
+  var menu = btn.parentElement.querySelector(".context-menu");
+  var wasOpen = menu.classList.contains("open");
+
+  // Close all other menus first
+  closeAllMenus();
+
+  // Toggle this one
+  if (!wasOpen) {
+    menu.classList.add("open");
+  }
+}
+
+function closeAllMenus() {
+  var menus = document.querySelectorAll(".context-menu.open");
+  for (var i = 0; i < menus.length; i++) {
+    menus[i].classList.remove("open");
+  }
+}
+
+// Close menus when clicking outside
+document.addEventListener("click", function () {
+  closeAllMenus();
+});
 
 // ---- Navigation ----
 

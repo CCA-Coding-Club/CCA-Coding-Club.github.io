@@ -50,12 +50,12 @@ async function loadAllChallenges() {
       }
     }
 
-    // Step 2: Fetch challenge.md for each folder and parse front matter
-    var challenges = [];
+    // Step 2: Fetch all challenge.md files in parallel (much faster)
+    var fetchPromises = [];
     for (var i = 0; i < folders.length; i++) {
-      var parsed = await fetchChallenge(folders[i]);
-      challenges.push(parsed);
+      fetchPromises.push(fetchChallenge(folders[i]));
     }
+    var challenges = await Promise.all(fetchPromises);
 
     // Step 3: Sort by date (newest first)
     challenges.sort(function (a, b) {
