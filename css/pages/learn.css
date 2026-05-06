@@ -1,0 +1,261 @@
+/* Learn Page — path selection */
+.learn-page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + 2rem) 1.5rem 4rem;
+}
+
+.learn-page h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.learn-page > p {
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+}
+
+/* Path Cards Grid */
+.paths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.path-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.path-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.path-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.path-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.path-card p {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.path-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: auto;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* Status messages */
+.status-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-dim);
+}
+
+.status-message h3 {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+/* Back button */
+.btn-back {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.875rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-back:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* learn-path page */
+.learn-path-page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + 1.5rem) 1.5rem 3rem;
+}
+
+.path-page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.path-page-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.graph-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.graph-svg {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.graph-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-dot.locked    { background: #3a3f55; }
+.legend-dot.available { background: var(--accent); }
+.legend-dot.complete  { background: #22c55e; }
+
+/* learn-node page */
+.learn-node-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + 1.5rem) 1.5rem 4rem;
+}
+
+.node-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.node-type-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--accent);
+}
+
+.node-type-badge.challenge {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+}
+
+.node-content-body {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+.node-actions {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-complete {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-complete:hover { opacity: 0.85; }
+
+.btn-complete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-complete.already-done {
+  background: #166534;
+  cursor: default;
+}
+
+.complete-msg {
+  font-size: 0.85rem;
+  color: #22c55e;
+}
+
+@media (max-width: 640px) {
+  .paths-grid {
+    grid-template-columns: 1fr;
+  }
+}
