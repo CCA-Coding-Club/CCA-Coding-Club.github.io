@@ -14,6 +14,7 @@ var PAGES = [
   { name: "Challenges", href: "pages/challenges.html" },
   { name: "Worksheets", href: "pages/worksheets.html" },
   { name: "Projects", href: "pages/projects.html" },
+  { name: "Learn", href: "pages/learn.html" },
 ];
 
 // ---- Build and inject the navbar ----
