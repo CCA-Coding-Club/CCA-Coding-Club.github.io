@@ -54,7 +54,7 @@ window.addEventListener('load', () => {
     // Bind the logout execution
     logoutBtn.addEventListener('click', () => {
         signOut(auth).then(() => {
-            console.log("Session successfully terminated.");
+            console.log("Successfully logged out.");
         });
     });
 
@@ -64,12 +64,12 @@ window.addEventListener('load', () => {
             // User is securely within the hierarchy
             loginBtn.style.display = 'none';
             logoutBtn.style.display = 'block';
-            userTelemetry.innerHTML = `Welcome, Operator: ${user.displayName} (${user.email})`;
+            userTelemetry.innerHTML = `Welcome, Coder: (${user.email})`;
         } else {
             // User has returned to the unverified state
             loginBtn.style.display = 'block';
             logoutBtn.style.display = 'none';
-            userTelemetry.innerHTML = "Status: Unverified.";
+            userTelemetry.innerHTML = "Status: Guest.";
         }
     });
 

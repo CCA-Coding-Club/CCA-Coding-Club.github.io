@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //oauth login implementation -weston
   var authHtml = '<div id="authentication-module" class="navbar__auth">' +
                '<button id="github-login-btn">Authenticate via GitHub</button>' +
-               '<button id="logout-btn" style="display: none;">Terminate Session</button>' +
+               '<button id="logout-btn" style="display: none;">Logout</button>' +
                '<div id="user-telemetry"></div>' +
                '</div>';
   // Inject the full navbar
@@ -51,6 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
     '<nav class="navbar"><div class="navbar__inner">' +
     '<a href="' + prefix + 'index.html" class="navbar__brand">' +
     '<div class="navbar__logo">CC</div>Coding Club</a>' +
-    '<div class="navbar__links">' + linksHtml + authHtml + '</div>' +
+    '<div class="navbar__links">' + linksHtml + '</div>' + '<div class="navbar__links" "navbar__profile">' + authHtml + '</div>' +
     '</div></nav>';
 });
