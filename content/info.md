@@ -1,15 +1,12 @@
 # Welcome to the Coding Club Website
 
-[![GitHub stars](https://img.shields.io/github/stars/westonmook/Coding_Club?style=flat-square)](https://github.com/YourUsername/Coding-Club/stargazers) `<!-- Stars Badge -->`
-[![GitHub forks](https://img.shields.io/github/forks/westonmook/Coding_Club?style=flat-square)](https://github.com/YourUsername/Coding-Club/forks) `<!-- Forks Badge -->`
-[![GitHub contributors](https://img.shields.io/github/contributors/westonmook/Coding_Club?style=flat-square)](https://github.com/YourUsername/Coding-Club/graphs/contributors) `<!-- Contributors Badge -->`
-[![License](https://img.shields.io/github/license/westonmook/Coding_Club?style=flat-square)](./LICENSE) `<!-- License Badge (TBD) -->`
-[![Wiki](https://img.shields.io/badge/Documentation-Wiki-blue?style=flat-square)](../../wiki) `<!-- Wiki Badge -->`
 
 ---
 
-Welcome to the **Coding Club Repository**!
-This is our central hub for code, collaboration, and community projects.
+Welcome to the **Coding Club Website**!
+This is our github hosted website. Designed to be simple and intuitive. (Unlike Github)
+
+The purposes of the Club are learning, collaboration. We also work on community projects such as discord bots, games, or applications.
 Whether you're new to programming or already experienced, this repo and its wiki will help you learn, practice, and grow as a developer.
 
 ---
@@ -35,7 +32,7 @@ If you're just joining, here's how to get started:
 
    - Install [Visual Studio Code](https://code.visualstudio.com/)
    - Install [Git](https://git-scm.com/downloads)
-   - Create a [GitHub account](https://github.com/)
+   - Create a `<a href="https://github.com/" target="_blank">Github Account</a>`
    - Clone this repository:
      ```bash
      git clone <repo_url>
