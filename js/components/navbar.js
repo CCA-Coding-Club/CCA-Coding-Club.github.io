@@ -39,11 +39,18 @@ document.addEventListener("DOMContentLoaded", function () {
     linksHtml += '<a href="' + href + '" class="navbar__link' + active + '">' + page.name + '</a>';
   }
 
+  //oauth login implementation -weston
+  var authHtml = '<div id="authentication-module" class="navbar__auth">' +
+               '<button id="github-login-btn">Authenticate via GitHub</button>' +
+               '<button id="logout-btn" style="display: none;">Terminate Session</button>' +
+               '<div id="user-telemetry"></div>' +
+               '</div>';
   // Inject the full navbar
+  //weston: I added authHtml to navbar links
   container.innerHTML =
     '<nav class="navbar"><div class="navbar__inner">' +
     '<a href="' + prefix + 'index.html" class="navbar__brand">' +
     '<div class="navbar__logo">CC</div>Coding Club</a>' +
-    '<div class="navbar__links">' + linksHtml + '</div>' +
+    '<div class="navbar__links">' + linksHtml + authHtml + '</div>' +
     '</div></nav>';
 });
