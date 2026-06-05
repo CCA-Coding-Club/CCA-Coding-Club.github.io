@@ -32,7 +32,7 @@ If you're just joining, here's how to get started:
 
    - Install [Visual Studio Code](https://code.visualstudio.com/)
    - Install [Git](https://git-scm.com/downloads)
-   - Create a `<a href="https://github.com/" target="_blank">Github Account</a>`
+   - Create a <a href="https://github.com/" target="_blank">Github Account</a>
    - Clone this repository:
      ```bash
      git clone <repo_url>
