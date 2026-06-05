@@ -30,7 +30,7 @@ If you're just joining, here's how to get started:
 1. **Set Up Your Environment**
 
    - Install <a href="https://www.jetbrains.com/pycharm/" target="_blank">Pycharm (beginner friendly)</a> or <a href="https://vscodium.com/" target="_blank">vscodium (most modular)</a> or <a href="https://code.visualstudio.com/download" target="_blank">vscode (most widely used)</a>
-   - Install [Git](https://git-scm.com/downloads)
+   - Install <a href="https://git-scm.com/install/" target="_blank">Git</a>
    - Create a <a href="https://github.com/" target="_blank">Github Account</a>
    - Clone this repository:
      ```bash
