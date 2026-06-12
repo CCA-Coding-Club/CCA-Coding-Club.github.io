@@ -120,9 +120,12 @@ async function loadFolder(path) {
       });
     }
 
-    // Sort: folders first, then files, natural numeric order within each
+    // Sort: folders first, then .docx files, then the rest — natural numeric order within each
     items.sort(function (a, b) {
       if (a.type !== b.type) return a.type === "folder" ? -1 : 1;
+      var aDocx = a.name.toLowerCase().endsWith(".docx") ? 0 : 1;
+      var bDocx = b.name.toLowerCase().endsWith(".docx") ? 0 : 1;
+      if (aDocx !== bDocx) return aDocx - bDocx;
       return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
     });
 
