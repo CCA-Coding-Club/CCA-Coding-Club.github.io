@@ -120,10 +120,10 @@ async function loadFolder(path) {
       });
     }
 
-    // Sort: folders first, then files, alphabetically within each
+    // Sort: folders first, then files, natural numeric order within each
     items.sort(function (a, b) {
       if (a.type !== b.type) return a.type === "folder" ? -1 : 1;
-      return a.name.localeCompare(b.name);
+      return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
     });
 
     renderFileList(items);
