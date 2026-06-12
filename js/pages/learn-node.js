@@ -5,27 +5,6 @@
  * URL hash: #pathId/nodeId
  */
 
-var LEARN_CONTENT_BASE = 'https://raw.githubusercontent.com/CCA-Coding-Club/Discord-with-Python/main';
-
-async function fetchPathData(pathId) {
-    var res = await fetch(LEARN_CONTENT_BASE + '/' + pathId + '/path.json');
-    return res.json();
-}
-
-async function fetchNodeContent(pathId, nodeId) {
-    var res = await fetch(LEARN_CONTENT_BASE + '/' + pathId + '/' + nodeId + '/node.md');
-    if (!res.ok) throw new Error('Node not found');
-    return res.text();
-}
-
-function getLocalProgress(pathId) {
-    try {
-        return JSON.parse(localStorage.getItem('progress_' + pathId) || '[]');
-    } catch (e) {
-        return [];
-    }
-}
-
 function saveLocalProgress(pathId, nodeId) {
     var completed = getLocalProgress(pathId);
     if (completed.indexOf(nodeId) === -1) {
@@ -77,9 +56,14 @@ async function init() {
 
     var pathData, rawContent;
     try {
+        var entry = await fetchPathEntry(pathId);
+        var base = resolvePathBase(entry);
         [pathData, rawContent] = await Promise.all([
-            fetchPathData(pathId),
-            fetchNodeContent(pathId, nodeId)
+            fetch(base + '/path.json').then(function(r) { return r.json(); }),
+            fetch(base + '/' + nodeId + '/node.md').then(function(r) {
+                if (!r.ok) throw new Error('Node not found');
+                return r.text();
+            })
         ]);
     } catch (e) {
         document.getElementById('node-content').innerHTML = '<p class="loading">Could not load content.</p>';

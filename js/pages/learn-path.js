@@ -7,8 +7,6 @@
  * Clicking an available or complete node navigates to learn-node.html#pathId/nodeId
  */
 
-var LEARN_CONTENT_BASE = 'https://raw.githubusercontent.com/CCA-Coding-Club/Discord-with-Python/main';
-
 // SVG geometry constants
 var DIAMOND_HW = 75;
 var DIAMOND_HH = 55;
@@ -16,19 +14,6 @@ var CHALLENGE_HW = 110;
 var CHALLENGE_HH = 28;
 var SVG_W = 760;
 var SVG_H = 810;
-
-async function fetchPath(pathId) {
-    var res = await fetch(LEARN_CONTENT_BASE + '/' + pathId + '/path.json');
-    return res.json();
-}
-
-function getLocalProgress(pathId) {
-    try {
-        return JSON.parse(localStorage.getItem('progress_' + pathId) || '[]');
-    } catch (e) {
-        return [];
-    }
-}
 
 // Build a map of nodeId -> 'locked' | 'available' | 'complete'
 function computeStates(nodes, edges, completedNodes) {
@@ -182,7 +167,9 @@ async function init() {
 
     var pathData;
     try {
-        pathData = await fetchPath(hash);
+        var entry = await fetchPathEntry(hash);
+        var base = resolvePathBase(entry);
+        pathData = await fetch(base + '/path.json').then(function(r) { return r.json(); });
     } catch (e) {
         document.getElementById('graph-container').innerHTML = '<p class="loading">Could not load path data.</p>';
         return;
