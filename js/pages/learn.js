@@ -1,30 +1,16 @@
 /*
  * learn.js — Learning path selection page.
  *
- * Fetches paths.json from the Discord-with-Python repo and renders path cards.
+ * Fetches the central paths.json (see learn-config.js) and renders path cards.
  * Progress is read from localStorage (keyed by pathId).
  */
 
-var LEARN_CONTENT_BASE = 'https://raw.githubusercontent.com/CCA-Coding-Club/Discord-with-Python/main';
-
-async function fetchPaths() {
-    var res = await fetch(LEARN_CONTENT_BASE + '/paths.json');
-    return res.json();
-}
-
-function getLocalProgress(pathId) {
-    try {
-        return JSON.parse(localStorage.getItem('progress_' + pathId) || '[]');
-    } catch (e) {
-        return [];
-    }
-}
-
 function pathCardHTML(path, done, total) {
     var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    var icon = path.icon || '📘';
     return '<a class="path-card" href="learn-path.html#' + path.id + '">' +
         '<div class="path-card-top">' +
-            '<span class="path-icon">' + path.icon + '</span>' +
+            '<span class="path-icon">' + icon + '</span>' +
             '<h2>' + path.title + '</h2>' +
         '</div>' +
         '<p>' + path.description + '</p>' +
