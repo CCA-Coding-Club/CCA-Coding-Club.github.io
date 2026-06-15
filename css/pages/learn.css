@@ -38,6 +38,7 @@
 .path-card:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
+  text-decoration: none;
 }
 
 .path-card-top {
@@ -118,6 +119,7 @@
 .btn-back:hover {
   border-color: var(--accent);
   color: var(--text);
+  text-decoration: none;
 }
 
 /* learn-path page */

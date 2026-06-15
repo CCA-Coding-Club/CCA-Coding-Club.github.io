@@ -2,6 +2,12 @@
 
 .graph-node {
     cursor: default;
+    text-decoration: none;
+}
+
+.graph-node:hover,
+.graph-node:focus {
+    text-decoration: none;
 }
 
 .graph-node.available {
@@ -52,6 +58,12 @@
     font-weight: 500;
     pointer-events: none;
     user-select: none;
+    text-decoration: none;
+}
+
+.graph-node:hover .node-label,
+.graph-node:hover .node-check {
+    text-decoration: none;
 }
 
 .graph-node.locked .node-label {
