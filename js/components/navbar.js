@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
   container.innerHTML =
     '<nav class="navbar"><div class="navbar__inner">' +
     '<a href="' + prefix + 'index.html" class="navbar__brand">' +
-    '<div class="navbar__logo">CC</div>Coding Club</a>' +
+    '<img src="' + prefix + 'assets/logo.png" class="navbar__logo" alt="Coding Club Logo" />Coding Club</a>' +
     '<div class="navbar__links">' + linksHtml + '</div>' + '<div class="navbar__links" "navbar__profile">' + authHtml + '</div>' +
     '</div></nav>';
 });

@@ -1,6 +1,86 @@
 /* Info Page */
 .info-page {
-  max-width: var(--max-width);
+  max-width: 820px;
   margin: 0 auto;
-  padding: calc(var(--nav-height) + 2rem) 1.5rem 4rem;
+  padding: calc(var(--nav-height) + 3rem) 1.5rem 6rem;
+}
+
+/* Hero intro — the first h1 + paragraph block */
+.info-page .markdown h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--text) 60%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section headings */
+.info-page .markdown h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
+}
+
+/* Regular list items */
+.info-page .markdown ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.info-page .markdown ul li {
+  margin-bottom: 0.4rem;
+  color: var(--text-dim);
+}
+
+.info-page .markdown ol li {
+  color: var(--text-dim);
+}
+
+/* Table */
+.info-page .markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0 2rem;
+  font-size: 0.9rem;
+}
+
+.info-page .markdown th {
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+}
+
+.info-page .markdown td {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.info-page .markdown tr:hover td {
+  background: var(--bg-hover);
+}
+
+/* Horizontal rules */
+.info-page .markdown hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+/* Footer copyright line */
+.info-page .markdown > p:last-child {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin-top: 2rem;
 }
