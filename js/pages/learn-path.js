@@ -137,8 +137,16 @@ function buildSVG(pathData, states) {
     var nodeMap = {};
     pathData.nodes.forEach(function(n) { nodeMap[n.id] = n; });
 
+    // Canvas grows to fit the lowest node so long paths aren't clipped.
+    var canvasH = SVG_H;
+    pathData.nodes.forEach(function(n) {
+        var halfH = n.type === 'challenge' ? CHALLENGE_HH : DIAMOND_HH;
+        var bottom = n.y + halfH + 30;
+        if (bottom > canvasH) canvasH = bottom;
+    });
+
     var parts = [
-        '<svg class="graph-svg" viewBox="0 0 ' + SVG_W + ' ' + SVG_H + '" xmlns="http://www.w3.org/2000/svg">',
+        '<svg class="graph-svg" viewBox="0 0 ' + SVG_W + ' ' + canvasH + '" xmlns="http://www.w3.org/2000/svg">',
         '<defs>',
         '<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">',
         '<polygon points="0 0, 8 3, 0 6" fill="#3a3f55"/></marker>',
