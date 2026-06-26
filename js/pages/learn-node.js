@@ -23,7 +23,7 @@ function renderCompleteButton(container, pathData, nodeId, isComplete) {
 
     if (isComplete) {
         container.innerHTML =
-            '<button class="btn-complete already-done" disabled>✓ Already Completed</button>' +
+            '<button class="btn-complete already-done" disabled>Already Completed</button>' +
             '<a class="btn-back" href="learn-path.html#' + pathData.id + '">← Back to Path</a>';
         return;
     }
@@ -34,7 +34,7 @@ function renderCompleteButton(container, pathData, nodeId, isComplete) {
     btn.onclick = function() {
         saveLocalProgress(pathData.id, nodeId);
         container.innerHTML =
-            '<span class="complete-msg">✓ Marked as complete!</span>' +
+            '<span class="complete-msg">Marked as complete!</span>' +
             '<a class="btn-back" href="learn-path.html#' + pathData.id + '">← Back to Path</a>';
     };
 
