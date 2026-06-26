@@ -61,21 +61,12 @@
     text-decoration: none;
 }
 
-.graph-node:hover .node-label,
-.graph-node:hover .node-check {
+.graph-node:hover .node-label {
     text-decoration: none;
 }
 
 .graph-node.locked .node-label {
     fill: #64748b;
-}
-
-/* Checkmark for completed nodes */
-.graph-node .node-check {
-    fill: #4ade80;
-    font-size: 16px;
-    font-weight: 700;
-    pointer-events: none;
 }
 
 /* Edges */

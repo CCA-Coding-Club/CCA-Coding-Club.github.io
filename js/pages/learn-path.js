@@ -112,23 +112,11 @@ function renderNode(node, state, pathId) {
         label = svgLabel(node.x, node.y, node.title, 11);
     }
 
-    var topY = node.y - (node.type === 'challenge' ? CHALLENGE_HH : DIAMOND_HH) - 8;
-
-    var check = state === 'complete'
-        ? '<text class="node-check" x="' + node.x + '" y="' + topY +
-          '" text-anchor="middle" dominant-baseline="auto">✓</text>'
-        : '';
-
-    var lock = state === 'locked'
-        ? '<text class="node-label" x="' + node.x + '" y="' + topY +
-          '" text-anchor="middle" dominant-baseline="auto" style="font-size:13px;fill:#4a5568">🔒</text>'
-        : '';
-
     var href = state !== 'locked' ? 'href="learn-node.html#' + pathId + '/' + node.id + '"' : '';
     var tag = state !== 'locked' ? 'a' : 'g';
 
     return '<' + tag + ' class="' + cls + '" ' + href + '>' +
-        shape + label + check + lock +
+        shape + label +
     '</' + tag + '>';
 }
 
