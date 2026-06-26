@@ -44,14 +44,15 @@ document.addEventListener("DOMContentLoaded", function () {
                '<button id="github-login-btn">Authenticate via GitHub</button>' +
                '<button id="logout-btn" style="display: none;">Logout</button>' +
                '<div id="user-telemetry"></div>' +
+               '<script type="module" src="./js/base/auth-logic.js"></script>' +
                '</div>';
-  var authlogic = '<script type="module" src="./js/base/auth-logic.js"></script>'
+  //var authlogic = '<script type="module" src="./js/base/auth-logic.js"></script>'
   // Inject the full navbar
   //weston: I added authHtml to navbar links
   container.innerHTML =
     '<nav class="navbar"><div class="navbar__inner">' +
     '<a href="' + prefix + 'index.html" class="navbar__brand">' +
     '<img src="' + prefix + 'assets/logo.png" class="navbar__logo" alt="Coding Club Logo" />Coding Club</a>' +
-    '<div class="navbar__links">' + linksHtml + '</div>' + '<div class="navbar__links" "navbar__profile">' + authHtml + authlogic + '</div>' +
+    '<div class="navbar__links">' + linksHtml + '</div>' + '<div class="navbar__links" "navbar__profile">' + authHtml + '</div>' +
     '</div></nav>';
 });
