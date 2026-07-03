@@ -53,4 +53,14 @@ document.addEventListener("DOMContentLoaded", function () {
     '<img src="' + prefix + 'assets/logo.png" class="navbar__logo" alt="Coding Club Logo" />Coding Club</a>' +
     '<div class="navbar__links">' + linksHtml + '</div>' + '<div class="navbar__links" "navbar__profile">' + authHtml + '</div>' +
     '</div></nav>';
+
+  // Load the auth module wherever the navbar renders
+  // Guard against double-injection
+  if (!document.getElementById("auth-logic-script")) {
+    var authScript = document.createElement("script");
+    authScript.id = "auth-logic-script";
+    authScript.type = "module";
+    authScript.src = prefix + "auth-logic.js";
+    document.body.appendChild(authScript);
+  }
 });

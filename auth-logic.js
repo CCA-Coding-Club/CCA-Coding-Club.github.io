@@ -27,8 +27,8 @@ const githubProvider = new GithubAuthProvider();
 // CHRONOLOGICAL DETERMINISM PERIMETER
 // No physical DOM interaction may occur until the browser confirms total load completion
 // ============================================================================
-window.addEventListener('load', () => {
-    
+function initAuth() {
+
     // Acquire references to your newly injected HTML elements
     const loginBtn = document.getElementById('github-login-btn');
     const logoutBtn = document.getElementById('logout-btn');
@@ -73,4 +73,10 @@ window.addEventListener('load', () => {
         }
     });
 
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAuth);
+} else {
+    initAuth();
+}
