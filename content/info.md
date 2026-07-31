@@ -1,4 +1,8 @@
 # Welcome to the Coding Club Website!
+<p align="center">
+  <img title="a title" alt="Alt text" src="../assets/group_photo.webp" width="50%" height="50%">
+</p>
+
 
 ---
 
